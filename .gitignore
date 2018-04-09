@@ -5,6 +5,7 @@
 .qualtRics
 .qualtRics.yml
 .qualtRicstmp.yml
+revamp.md
 inst/doc
 /documentation/*
 /man/qualtRicsResponseCodes.Rd
