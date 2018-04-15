@@ -8,6 +8,13 @@ registerOptions <- function(verbose=TRUE,
                             useLocalTime=FALSE,
                             dateWarning=TRUE,
                             ...) {
+
+  opts <- list(...)
+  # If base url / api token in list, then get
+  base_url <- ifelse("base_url" %in% names(opts), opts$base_url, NA)
+  api_token <- ifelse("api_token" %in% names(opts), opts$api_token, NA)
+  root_url <- ifelse("root_url" %in% names(opts), opts$root_url, NA)
+
   # Warning message
   warning("'registerOptions' is deprecated and will be removed in version 4.0 of qualtRics.\nPlease use 'qualtrics_register_options' instead.\n")
   # Call new function
@@ -16,7 +23,9 @@ registerOptions <- function(verbose=TRUE,
                              convertVariables = convertVariables,
                              useLocalTime = useLocalTime,
                              dateWarning = dateWarning,
-                             ...)
+                             base_url = base_url,
+                             api_token = api_token,
+                             root_url = root_url)
 }
 
 #' @rdname qualtrics_get_survey

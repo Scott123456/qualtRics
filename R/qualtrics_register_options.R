@@ -71,15 +71,21 @@ qualtrics_register_options <- function(verbose=TRUE,
   # Take additional arguments
   args <- list(...)
   # Store base_url/api_token. Else give NA as value
-  root_url <- ifelse("base_url" %in% names(args), args$base_url, NA)
-  api_token <- ifelse("api_token" %in% names(args), args$api_token, NA)
+  root_url <- ifelse("base_url" %in% names(args),
+                     ifelse(is.na(args$base_url), NA, args$base_url),
+                     NA)
+  api_token <- ifelse("api_token" %in% names(args),
+                      ifelse(is.na(args$api_token), NA, args$base_url),
+                      NA)
   # Show deprecated warning
   calls <- names(vapply(match.call(), deparse, "character"))[-1]
   # Check if deprecated params passed
   if(any("root_url" %in% calls)) {
-    warning("'root_url' is deprecated and will be removed in qualtRics 4.0. Please use 'base_url' instead.")
-    # Save to new param
-    root_url <- args$root_url
+    if(!is.na(args$root_url)) {
+      warning("'root_url' is deprecated and will be removed in qualtRics 4.0. Please use 'base_url' instead.")
+      # Save to new param
+      root_url <- args$root_url
+    }
   }
 
   # OPTION 1: USER ALREADY SET ENV VARIABLES AND WANTS TO CHANGE OPT. VARIABLES ----
