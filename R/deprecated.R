@@ -90,3 +90,15 @@ qualtRicsConfigFile <- function(api_token = NULL,
                         dateWarning=dateWarning,
                         root_url = root_url)
 }
+
+#' @rdname qualtrics_get_metadata
+#' @export
+metadata <- function(surveyID) {
+
+  # Warning message
+  warning("'metadata' is deprecated and will be removed in version 4.0 of qualtRics.\nPlease use 'qualtrics_get_metadata' instead.\n")
+
+  # Call new function
+  qualtrics_get_metadata(surveyID)
+
+}
