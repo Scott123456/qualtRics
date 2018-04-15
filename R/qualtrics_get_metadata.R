@@ -63,66 +63,10 @@ qualtrics_get_metadata <- function(surveyID) {
   root_url <- paste0(root_url, surveyID)
   # Send GET request to list all surveys
   resp <- qualtricsApiRequest("GET", root_url)
-  # Filter
-  resp_filt <- resp$result
 
-  # RESHAPE DATA ----
+  # TO CLASS AND RETURN ----
 
-  # Metadata
-  metadata <- data.frame(
-    "surveyID" = resp_filt$id,
-    "name"= resp_filt$name,
-    "ownerId" = resp_filt$ownerId,
-    "organizationId"=resp_filt$organizationId,
-    "isActive" = resp_filt$isActive,
-    "creationDate" = resp_filt$creationDate,
-    "lastModifiedDate"=resp_filt$lastModifiedDate,
-    "expiration_startdate"=ifelse(is.null(resp_filt$expiration$startDate),
-                                  NA,
-                                  resp_filt$expiration$startDate),
-    "expiration_endDate"=ifelse(is.null(resp_filt$expiration$endDate),
-                                NA,
-                                resp_filt$expiration$endDate)
-  )
-  # Response counts
-  responsecounts <- data.frame(
-    "auditable"=resp_filt$responseCounts$auditable,
-    "generated"=resp_filt$responseCounts$generated,
-    "deleted"=resp_filt$responseCounts$deleted
-  )
-
-  # Metadata about questions
-  if(!is.null(q_select)) {
-    qnames <- vapply(resp_filt$questions, function(x) {
-      x$questionName
-    }, "")
-    if(all(q_select %in% qnames)) {
-      questions <- resp_filt$questions[which(qnames %in% q_select)]
-    } else {
-      warning(paste0("One or more questions you queried are not present in your survey.\nReturning all questions instead.")) # nolint
-      questions <- resp_filt$questions
-    }
-  } else {
-    questions <- resp_filt$questions
-  }
-
-  # WRAP UP AND RETURN ----
-
-  # Construct metadata
-  met <- list("metadata"=metadata,
-              "questions"=questions,
-              "responsecounts"=responsecounts,
-              "blocks"=resp_filt$blocks,
-              "flow"=resp_filt$flow,
-              "embedded_data"=resp_filt$embeddedData,
-              "comments"=resp_filt$comments)
-  # Make subset
-  met_ss <- met[names(standard_list[vapply(standard_list,
-                                           function(x) x==TRUE, TRUE)])] # nolint
-
-  # RETURN ----
-
-  return(met_ss)
+  QualtricsMetadata(resp)
 
 
 }
