@@ -31,7 +31,8 @@ Imports:
     sjlabelled,
     yaml,
     dplyr,
-    rlang
+    rlang,
+    keyringr
 URL:
     https://ropensci.github.io/qualtRics/
 BugReports:
