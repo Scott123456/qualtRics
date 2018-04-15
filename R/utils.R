@@ -402,10 +402,18 @@ downloadQualtricsExport <- function(check_url, verbose = FALSE) {
                 "csv",
                 " from zip file. Please re-run your query."))
   })
+
+  ## There is an issue with survey names that contain special characters such as colons.
+  ## Temporarily change all names to 'temp.csv'
+
+  # Rename file
+  temp_name <- paste0(tempdir(), "/temp.csv")
+  io <- file.rename(u, temp_name)
   # Remove zipfile
   p <- file.remove(tf)
+
   # Return file location
-  return(u)
+  return(temp_name)
 }
 
 # Set proper data types on survey data.
