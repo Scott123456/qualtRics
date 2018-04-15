@@ -2,7 +2,17 @@ Package: qualtRics
 Type: Package
 Title: Download Qualtrics Survey Data
 Version: 3.0
-Author: Jasper Ginn
+Authors@R: c(person("Jasper", "Ginn",
+              email = "Jasperginn@gmail.com",
+              role = c("aut", "cre", "cph"),
+              comment = c(ORCID = "0000-0002-5019-2923")
+              ),
+              person("Jesse", "Mostipak", 
+                      role = "rev",
+                      comment=c(ORCID = "0000-0003-1915-9612")),
+              person("Tyler", "Rinker", 
+                      role = "rev",
+                      comment=c(ORCID = "0000-0002-4299-7692")))
 Maintainer: Jasper Ginn <jasperginn@gmail.com>
 Description: Qualtrics <https://www.qualtrics.com/about/> 
     allows users to collect online data through surveys.
