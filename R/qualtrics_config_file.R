@@ -34,7 +34,7 @@
 #' }
 #'
 
-qualtRicsConfigFile <- function(api_token = NULL,
+qualtrics_config_file <- function(api_token = NULL,
                                 base_url=NULL,
                                 verbose=TRUE,
                                 useLabels=TRUE,

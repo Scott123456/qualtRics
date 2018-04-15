@@ -43,7 +43,7 @@
 #'                       verbose = TRUE)
 #' }
 
-getSurveys <- function() {
+qualtrics_get_surveys <- function() {
 
   # CHECK PARAMS AND PREP QUERY ----
 

@@ -59,12 +59,12 @@
 #' }
 #'
 
-registerOptions <- function(verbose=TRUE,
-                            useLabels=TRUE,
-                            convertVariables=TRUE,
-                            useLocalTime=FALSE,
-                            dateWarning=TRUE,
-                            ...) {
+qualtrics_register_options <- function(verbose=TRUE,
+                                       useLabels=TRUE,
+                                       convertVariables=TRUE,
+                                       useLocalTime=FALSE,
+                                       dateWarning=TRUE,
+                                       ...) {
 
   # START UP: CHECK ARGUMENTS PASSED BY USER ----
 

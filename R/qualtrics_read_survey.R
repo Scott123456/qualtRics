@@ -47,9 +47,9 @@
 #' sample_legacy_df <- readSurvey(file)
 #' }
 
-readSurvey <- function(file_name,
-                       stripHTML = TRUE,
-                       legacyFormat = FALSE) {
+qualtrics_read_survey <- function(file_name,
+                                  stripHTML = TRUE,
+                                  legacyFormat = FALSE) {
 
   # START UP: CHECK ARGUMENTS PASSED BY USER ----
 

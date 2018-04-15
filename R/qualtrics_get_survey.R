@@ -65,16 +65,16 @@
 #'                       verbose = TRUE)
 #' }
 
-getSurvey <- function(surveyID,
-                      lastResponseId=NULL,
-                      startDate=NULL,
-                      endDate=NULL,
-                      seenUnansweredRecode=NULL,
-                      limit = NULL,
-                      includedQuestionIds = NULL,
-                      saveDir=NULL,
-                      forceRequest=FALSE,
-                      ...) {
+qualtrics_get_survey <- function(surveyID,
+                                lastResponseId=NULL,
+                                startDate=NULL,
+                                endDate=NULL,
+                                seenUnansweredRecode=NULL,
+                                limit = NULL,
+                                includedQuestionIds = NULL,
+                                saveDir=NULL,
+                                forceRequest=FALSE,
+                                ...) {
 
   # OPTIONS AND CHECK PARAMETERS ----
 
