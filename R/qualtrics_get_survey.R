@@ -171,7 +171,7 @@ qualtrics_get_survey <- function(surveyID,
   data <- readSurvey(survey.fpath)
   # Add types
   if(convertVariables) {
-    data <- inferDataTypes(data, surveyID)
+    #data <- inferDataTypes(data, surveyID)
   }
   # Save survey as RDS file in temp folder so that it can be easily
   # retrieved this session.
