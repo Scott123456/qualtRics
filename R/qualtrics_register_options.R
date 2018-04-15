@@ -123,6 +123,9 @@ qualtrics_register_options <- function(verbose=TRUE,
     } else {
 
     # Option 2: check keychain
+
+      message("Found qualtrics credentials in keychain. Using these credentials.")
+
       cred <- qualtrics_helper_keychain_credentials()
 
       # If api key or root url not NULL, update

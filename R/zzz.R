@@ -24,60 +24,14 @@
 
 .onLoad <- function(libname = find.package("qualtRics"), pkgname="qualtRics") {
 
-  # If base url and api token loaded at R startup
-  if(all(Sys.getenv("QUALTRICS_API_KEY") != "" & Sys.getenv("QUALTRICS_ROOT_URL") != "")) {
-    if(!file.exists(".qualtRics.yml")) {
-      packageStartupMessage("Found qualtrics api token & qualtrics base url in .Rprofile. Using these credentials.\n")
-    }
-  }
+  # Trycatch register options
+  rop <- tryCatch({
+    qualtrics_register_options()
+  }, error = function(e) {
+    NULL
+  })
 
-  # Override other options if .qualtRics.yml exists
-  if(file.exists(".qualtRics.yml")) {
-    # Erase these values
-    Sys.setenv("QUALTRICS_ROOT_URL" = "")
-    Sys.setenv("QUALTRICS_API_KEY" = "")
-    # load 'registeroptions()'
-    suppressWarnings(registerOptions())
-  }
-
-  # Retrieve data using keyringr
-  get_os <- function(){
-    sysinf <- Sys.info()
-    if (!is.null(sysinf)){
-      os <- sysinf['sysname']
-      if (os == 'Darwin')
-        os <- "osx"
-    } else { ## mystery machine
-      os <- .Platform$OS.type
-      if (grepl("^darwin", R.version$os))
-        os <- "osx"
-      if (grepl("linux-gnu", R.version$os))
-        os <- "linux"
-    }
-    tolower(os)
-  }
-
-  # Get OS
-  os <- get_os()
-  # Api & root url
-  api_token_kc <- switch(
-    os,
-    "osx" = keyringr::decrypt_kc_pw("qualtrics_api_token"),
-    "linux" = keyringr::decrypt_gk_pw("qualtrics_api_token")
-  )
-  base_url_kc <- switch(
-    os,
-    "osx" = keyringr::decrypt_kc_pw("qualtrics_base_url"),
-    "linux" = keyringr::decrypt_gk_pw("qualtrics_base_url")
-  )
-
-  # If both exist, register
-  if(!is.null(api_token_kc) & !is.null(base_url_kc)) {
-    packageStartupMessage("Found a qualtrics base url & api token in the keychain. Using these credentials. You may need to authenticate.")
-    registerOptions(api_token = api_token_kc, base_url = base_url_kc)
-  }
-
-  # Set internal qualtRics settings
+    # Set internal qualtRics settings
   options(
     "QUALTRICS_INTERNAL_SETTINGS" = list("question_types_supported" =
                                            list("type"=c("MC"),

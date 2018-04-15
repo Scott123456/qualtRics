@@ -9,7 +9,8 @@ registerOptions(verbose = TRUE, useLabels = TRUE, convertVariables = TRUE,
   useLocalTime = FALSE, dateWarning = TRUE, ...)
 
 qualtrics_register_options(verbose = TRUE, useLabels = TRUE,
-  convertVariables = TRUE, useLocalTime = FALSE, dateWarning = TRUE, ...)
+  convertVariables = TRUE, useLocalTime = FALSE, dateWarning = TRUE,
+  api_key = NULL, base_url = NULL, ...)
 }
 \arguments{
 \item{verbose}{Logical. If TRUE, verbose messages will be printed to the R console. Defaults to TRUE.}
