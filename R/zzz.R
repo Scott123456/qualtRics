@@ -24,7 +24,18 @@
 
 .onLoad <- function(libname = find.package("qualtRics"), pkgname="qualtRics") {
 
+  # If base url and api token loaded at R startup
+  if(all(Sys.getenv("QUALTRICS_API_KEY") != "" & Sys.getenv("QUALTRICS_ROOT_URL") != "")) {
+    if(!file.exists(".qualtRics.yml")) {
+      message("Found qualtrics api token & qualtrics base url in .Rprofile. Using these credentials.\n")
+    }
+  }
+
+  # Override other options if .qualtRics.yml exists
   if(file.exists(".qualtRics.yml")) {
+    # Erase these values
+    Sys.setenv("QUALTRICS_ROOT_URL" = "")
+    Sys.setenv("QUALTRICS_API_KEY" = "")
     # load 'registeroptions()'
     suppressWarnings(registerOptions())
   }
