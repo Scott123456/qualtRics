@@ -9,7 +9,7 @@ registerOptions <- function(verbose=TRUE,
                             dateWarning=TRUE,
                             ...) {
   # Warning message
-  warning("'registerOptions' is deprecated and will be removed in version 4.0 of qualtRics. Please use 'qualtrics_register_options' instead.")
+  warning("'registerOptions' is deprecated and will be removed in version 4.0 of qualtRics.\nPlease use 'qualtrics_register_options' instead.\n")
   # Call new function
   qualtrics_register_options(verbose = verbose,
                              useLabels = useLabels,
@@ -32,7 +32,7 @@ getSurvey <- function(surveyID,
                       forceRequest=FALSE,
                       ...) {
   # Warning message
-  warning("'getSurvey' is deprecated and will be removed in version 4.0 of qualtRics. Please use 'qualtrics_get_survey' instead.")
+  warning("'getSurvey' is deprecated and will be removed in version 4.0 of qualtRics.\nPlease use 'qualtrics_get_survey' instead.\n")
   # Call new function
   qualtrics_get_survey(surveyID = surveyID,
                        lastResponseId=lastResponseId,
@@ -50,7 +50,7 @@ getSurvey <- function(surveyID,
 #' @export
 getSurveys <- function() {
   # Warning message
-  warning("'getSurveys' is deprecated and will be removed in version 4.0 of qualtRics. Please use 'qualtrics_get_surveys' instead.")
+  warning("'getSurveys' is deprecated and will be removed in version 4.0 of qualtRics.\nPlease use 'qualtrics_get_surveys' instead.\n")
   # Call new function
   qualtrics_get_surveys()
 }
@@ -61,7 +61,7 @@ readSurvey <- function(file_name,
                        stripHTML = TRUE,
                        legacyFormat = FALSE) {
   # Warning message
-  warning("'readSurvey' is deprecated and will be removed in version 4.0 of qualtRics. Please use 'qualtrics_read_survey' instead.")
+  warning("'readSurvey' is deprecated and will be removed in version 4.0 of qualtRics.\nPlease use 'qualtrics_read_survey' instead.\n")
   # Call new function
   qualtrics_read_survey(file_name = file_name,
                         stripHTML = stripHTML,
@@ -79,7 +79,7 @@ qualtRicsConfigFile <- function(api_token = NULL,
                                 dateWarning=TRUE,
                                 root_url = NULL) {
   # Warning message
-  warning("'qualtRicsConfigFile' is deprecated and will be removed in version 4.0 of qualtRics. Please use 'qualtrics_config_file' instead.")
+  warning("'qualtRicsConfigFile' is deprecated and will be removed in version 4.0 of qualtRics.\nPlease use 'qualtrics_config_file' instead.\n")
   # Call new function
   qualtrics_config_file(api_token = api_token,
                         base_url=base_url,
