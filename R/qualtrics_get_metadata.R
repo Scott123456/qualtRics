@@ -19,8 +19,6 @@
 #' Using this function, you can retrieve metadata about your survey. This information includes question metadata (type, options, choices etc), number of responses, general metadata, survey flow etc.
 #'
 #' @param surveyID String. Unique ID for the survey you want to download. Returned as 'id' by the \link[qualtRics]{getSurveys} function.
-#' @param get list containing TRUE/FALSE values of one of the following: metadata, questions,responsecounts, blocks, flow, embedded_data or comments. A TRUE value will return that specific element. If you leave this empty, the function will return the metadata, questions and responsecounts elements. See examples below for more information
-#' @param ... additional options. User may pass an argument called 'questions', which should be a vector containing the names of questions for which you want to return metadata.
 #'
 #' @author Jasper Ginn
 #' @importFrom assertthat assert_that
@@ -50,46 +48,12 @@
 #' }
 #'
 
-metadata <- function(surveyID,
-                     get = list(),
-                     ...) {
+qualtrics_get_metadata <- function(surveyID) {
 
   # OPTIONS AND PREP ----
 
   # Check params
   cp <- checkParams()
-  # Check if illegal options were passed by user
-  allowed <- c("metadata","questions","responsecounts",
-               "blocks","flow","embedded_data","comments")
-  check <- union(allowed, names(get))
-  assertthat::assert_that(length(check) <= length(allowed), # nolint
-                          msg="One or more options you passed to 'get' are not valid. Please check your\ninput and try again.") # nolint
-
-  # Change standard options if any
-  standard_list <- list("metadata"=TRUE,
-                        "questions"=TRUE,
-                        "responsecounts"=TRUE,
-                        "blocks"=FALSE,
-                        "flow"=FALSE,
-                        "embedded_data"=FALSE,
-                        "comments"=FALSE)
-  # Cycle over each argument and change
-  if(length(get) > 0) {
-    for(g in names(get)) {
-      standard_list[[g]] <- get[[g]]
-    }
-  }
-
-  # Other options
-  opts <- list(...)
-  if("questions" %in% names(opts)) {
-    # Check that is a vector
-    assertthat::assert_that(is.vector(opts$questions),
-                            msg="'questions' argument must be a vector")
-    q_select <- opts$questions
-  } else {
-    q_select <- NULL
-  }
 
   # QUERY API ----
 
