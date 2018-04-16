@@ -1,6 +1,10 @@
-# Classes
+# Helpers and classes
 
-# QUALTRICS METADATA CLASS ----
+# CLASSES ----
+
+# ------------------------------------- #
+# QualtricsMetadata class & constructor #
+# ------------------------------------- #
 
 .QualtricsMetadata <- setClass(
   # Name
@@ -97,76 +101,9 @@ QualtricsMetadata <- function(data) {
 
 }
 
-# Helper function. Basically a switch to assign proper question class.
-qualtrics_helper_assign_question_class <- function(question_data, identifier) {
-
-  # Get type
-  type <- question_data$questionType$type
-
-  #browser()
-  # Switch
-  switch(
-    type,
-    "MC" = MultipleChoice(question_data, identifier = identifier),
-    "DB" = SurveyInstruction(question_data, identifier = identifier),
-    QualtricsSurveyQuestion(question_data, identifier)
-  )
-
-}
-
-# Getter methods
-setGeneric("questions", function(x) setGeneric("questions"))
-setMethod("questions", "QualtricsMetadata", function(x) x@questions)
-
-# Print method
-setMethod("show", signature = "QualtricsMetadata",
-          function(object) {
-            mes <- paste0(
-              is(object)[[1]], " object.\n\n",
-              " Survey name: \t", slot(object, "survey_name"), "\n",
-              " Active: \t",
-              ifelse(slot(object, "is_active") == TRUE, "active", "inactive"),"\n",
-              " Questions: \t", length(slot(object, "questions")),"\n",
-              " Responses: \t", object@response_counts$auditable
-            )
-            cat(mes)
-          })
-
-# Plot method
-setMethod(f = "plot",
-          signature = "QualtricsMetadata",
-          definition = function(x, y, type = c("questions", "flow", "columns"),
-                                ...) {
-
-            # Type
-            type <- match.arg(type)
-            # If flow or columns
-            if(type == "flow" | type == "columns") {
-              warning("Not yet implemented\n")
-              return(NULL)
-            }
-
-            # Plot
-            object <- x
-            # Questions
-            q <- questions(object)
-            # Types
-            types <- unlist(lapply(q, function(x) type(x)))
-            # To data frame
-            df <- dplyr::data_frame(
-              type = types
-            ) %>%
-              dplyr::group_by(type) %>%
-              dplyr::tally() %>%
-              dplyr::arrange(dplyr::desc(n))
-            # Plot
-            ggplot(df, aes(x = type, y= n)) +
-              geom_bar(stat = "identity") +
-              theme_bw()
-
-          })
-
-# QUALTRICS SURVEY QUESTION CLASS ----
+# ------------------------------------------- #
+# QualtricsSurveyQuestion class & constructor #
+# ------------------------------------------- #
 
 # Qualtrics survey question class
 .QualtricsSurveyQuestion <- setClass(
@@ -226,24 +163,9 @@ QualtricsSurveyQuestion <- function(data, identifier) {
   return(cl)
 }
 
-# Getter methods
-setGeneric("type", function(x) setGeneric("type"))
-setMethod("type", "QualtricsSurveyQuestion", function(x) x@type)
-
-# Show method
-setMethod("show", "QualtricsSurveyQuestion",
-          function(object) {
-            msg <- paste0(
-              is(object)[[1]], " object.\n\n",
-              " Name: \t\t\t", object@name, "\n",
-              " Identifier: \t\t", object@identifier, "\n",
-              " Type: \t\t\t", object@type, "\n",
-              " Question text: \t", object@question_text, "\n"
-            )
-            cat(msg)
-          })
-
-# MULTIPLE CHOICE CLASS ----
+# ---------------------------------- #
+# MultipleChoice class & constructor #
+# ---------------------------------- #
 
 # Multiple choice
 .MultipleChoice <- setClass(
@@ -306,7 +228,9 @@ MultipleChoice <- function(data, identifier) {
 
 }
 
-# SURVEY INSTRUCTION CLASS ----
+# ------------------------------------- #
+# SurveyInstruction class & constructor #
+# ------------------------------------- #
 
 # Survey instruction
 .SurveyInstruction <- setClass(
@@ -326,3 +250,103 @@ SurveyInstruction <- function(data, identifier) {
   .SurveyInstruction(QSQ)
 
 }
+
+
+# METHODS ----
+
+# ----------------------------------- #
+# QualtricsMetadata methods & helpers #
+# ----------------------------------- #
+
+# Getters
+setGeneric("questions", function(x) setGeneric("questions"))
+setMethod("questions", "QualtricsMetadata", function(x) x@questions)
+
+# Print method
+setMethod("show", signature = "QualtricsMetadata",
+          function(object) {
+            mes <- paste0(
+              is(object)[[1]], " object.\n\n",
+              " Survey name: \t", slot(object, "survey_name"), "\n",
+              " Active: \t",
+              ifelse(slot(object, "is_active") == TRUE, "active", "inactive"),"\n",
+              " Questions: \t", length(slot(object, "questions")),"\n",
+              " Responses: \t", object@response_counts$auditable
+            )
+            cat(mes)
+          })
+
+# Plot method
+setMethod(f = "plot",
+          signature = "QualtricsMetadata",
+          definition = function(x, y, type = c("questions", "flow", "columns"),
+                                ...) {
+
+            # Type
+            type <- match.arg(type)
+            # If flow or columns
+            if(type == "flow" | type == "columns") {
+              warning("Not yet implemented\n")
+              return(NULL)
+            }
+
+            # Plot
+            object <- x
+            # Questions
+            q <- questions(object)
+            # Types
+            types <- unlist(lapply(q, function(x) type(x)))
+            # To data frame
+            df <- dplyr::data_frame(
+              type = types
+            ) %>%
+              dplyr::group_by(type) %>%
+              dplyr::tally() %>%
+              dplyr::arrange(dplyr::desc(n))
+            # Plot
+            ggplot(df, aes(x = type, y= n)) +
+              geom_bar(stat = "identity") +
+              theme_bw()
+
+          })
+
+# Helper function. Basically a switch to assign proper question class.
+# Called from QualtricsMetadata constructor
+qualtrics_helper_assign_question_class <- function(question_data, identifier) {
+
+  # Get type
+  type <- question_data$questionType$type
+
+  #browser()
+  # Switch
+  switch(
+    type,
+    "MC" = MultipleChoice(question_data, identifier = identifier),
+    "DB" = SurveyInstruction(question_data, identifier = identifier),
+    QualtricsSurveyQuestion(question_data, identifier)
+  )
+
+}
+
+# ----------------------------------------- #
+# QualtricsSurveyQuestion methods & helpers #
+# ----------------------------------------- #
+
+# Getter methods
+setGeneric("type", function(x) setGeneric("type"))
+setMethod("type", "QualtricsSurveyQuestion", function(x) x@type)
+
+# Show method
+setMethod("show", "QualtricsSurveyQuestion",
+          function(object) {
+            msg <- paste0(
+              is(object)[[1]], " object.\n\n",
+              " Name: \t\t\t", object@name, "\n",
+              " Identifier: \t\t", object@identifier, "\n",
+              " Type: \t\t\t", object@type, "\n",
+              " Question text: \t", object@question_text, "\n"
+            )
+            cat(msg)
+          })
+
+
