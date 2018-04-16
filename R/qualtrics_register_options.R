@@ -100,6 +100,21 @@ qualtrics_register_options <- function(verbose=TRUE,
     root_url <- base_url
   }
 
+  # If purge all credentials
+  if("reset_credentials" %in% names(opts)) {
+
+    assertthat::is.flag(opts$purge_credentials)
+
+    if(opts$purge_credentials) {
+
+      # Reset credentials
+      Sys.setenv("QUALTRICS_API_KEY" = "")
+      Sys.setenv("QUALTRICS_ROOT_URL" = "")
+
+    }
+
+  }
+
   # REGISTER BASE URL AND API TOKEN -----
 
   # Both api key and base url are already passed (e.g. via .Rprofile)
