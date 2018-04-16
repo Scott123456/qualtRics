@@ -228,125 +228,403 @@ MultipleChoice <- function(data, identifier) {
 
 }
 
-# ------------------------------------- #
-# SurveyInstruction class & constructor #
-# ------------------------------------- #
+# ----------------------------------- #
+# DescriptiveText class & constructor #
+# ----------------------------------- #
 
 # Survey instruction
-.SurveyInstruction <- setClass(
+.DescriptiveText <- setClass(
   # Name
-  "SurveyInstruction",
+  "DescriptiveText",
   # Inherits
   contains = "QualtricsSurveyQuestion"
 )
 
 # Constructor
-SurveyInstruction <- function(data, identifier) {
+DescriptiveText <- function(data, identifier) {
 
   # Call QualtricsSurveyQuestion constructor
   QSQ <- QualtricsSurveyQuestion(data, identifier)
 
   # Create an SI object
-  .SurveyInstruction(QSQ)
+  .DescriptiveText(QSQ)
 
 }
 
+# ------------------------------- #
+# TextGraphic class & constructor #
+# ------------------------------- #
 
-# METHODS ----
+# Survey instruction
+.TextGraphic <- setClass(
+  # Name
+  "TextGraphic",
+  # Inherits
+  contains = c("DescriptiveText", "QualtricsSurveyQuestion")
+)
 
-# ----------------------------------- #
-# QualtricsMetadata methods & helpers #
-# ----------------------------------- #
+# Constructor
+TextGraphic <- function(data, identifier) {
 
-# Getters
-setGeneric("questions", function(x) setGeneric("questions"))
-setMethod("questions", "QualtricsMetadata", function(x) x@questions)
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
 
-# Print method
-setMethod("show", signature = "QualtricsMetadata",
-          function(object) {
-            mes <- paste0(
-              is(object)[[1]], " object.\n\n",
-              " Survey name: \t", slot(object, "survey_name"), "\n",
-              " Active: \t",
-              ifelse(slot(object, "is_active") == TRUE, "active", "inactive"),"\n",
-              " Questions: \t", length(slot(object, "questions")),"\n",
-              " Responses: \t", object@response_counts$auditable
-            )
-            cat(mes)
-          })
-
-# Plot method
-setMethod(f = "plot",
-          signature = "QualtricsMetadata",
-          definition = function(x, y, type = c("questions", "flow", "columns"),
-                                ...) {
-
-            # Type
-            type <- match.arg(type)
-            # If flow or columns
-            if(type == "flow" | type == "columns") {
-              warning("Not yet implemented\n")
-              return(NULL)
-            }
-
-            # Plot
-            object <- x
-            # Questions
-            q <- questions(object)
-            # Types
-            types <- unlist(lapply(q, function(x) type(x)))
-            # To data frame
-            df <- dplyr::data_frame(
-              type = types
-            ) %>%
-              dplyr::group_by(type) %>%
-              dplyr::tally() %>%
-              dplyr::arrange(dplyr::desc(n))
-            # Plot
-            ggplot(df, aes(x = type, y= n)) +
-              geom_bar(stat = "identity") +
-              theme_bw()
-
-          })
-
-# Helper function. Basically a switch to assign proper question class.
-# Called from QualtricsMetadata constructor
-qualtrics_helper_assign_question_class <- function(question_data, identifier) {
-
-  # Get type
-  type <- question_data$questionType$type
-
-  #browser()
-  # Switch
-  switch(
-    type,
-    "MC" = MultipleChoice(question_data, identifier = identifier),
-    "DB" = SurveyInstruction(question_data, identifier = identifier),
-    QualtricsSurveyQuestion(question_data, identifier)
-  )
+  # Create an object
+  .TextGraphic(QSQ)
 
 }
 
-# ----------------------------------------- #
-# QualtricsSurveyQuestion methods & helpers #
-# ----------------------------------------- #
+# ------------------------------- #
+# MatrixTable class & constructor #
+# ------------------------------- #
 
-# Getter methods
-setGeneric("type", function(x) setGeneric("type"))
-setMethod("type", "QualtricsSurveyQuestion", function(x) x@type)
+# Survey instruction
+.MatrixTable <- setClass(
+  # Name
+  "MatrixTable",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
 
-# Show method
-setMethod("show", "QualtricsSurveyQuestion",
-          function(object) {
-            msg <- paste0(
-              is(object)[[1]], " object.\n\n",
-              " Name: \t\t\t", object@name, "\n",
-              " Identifier: \t\t", object@identifier, "\n",
-              " Type: \t\t\t", object@type, "\n",
-              " Question text: \t", object@question_text, "\n"
-            )
-            cat(msg)
-          })
+# Constructor
+MatrixTable <- function(data, identifier) {
 
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
 
+  # Create an object
+  .MatrixTable(QSQ)
+
+}
+
+# ----------------------------- #
+# TextEntry class & constructor #
+# ----------------------------- #
+
+# Survey instruction
+.TextEntry <- setClass(
+  # Name
+  "TextEntry",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+TextEntry <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .TextEntry(QSQ)
+
+}
+
+# -------------------------- #
+# Slider class & constructor #
+# -------------------------- #
+
+# Survey instruction
+.Slider <- setClass(
+  # Name
+  "Slider",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+Slider <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .Slider(QSQ)
+
+}
+
+# ----------------------------- #
+# RankOrder class & constructor #
+# ----------------------------- #
+
+.RankOrder <- setClass(
+  # Name
+  "RankOrder",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+RankOrder <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .RankOrder(QSQ)
+
+}
+
+# ------------------------------ #
+# SideBySide class & constructor #
+# ------------------------------ #
+
+.SideBySide <- setClass(
+  # Name
+  "SideBySide",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+SideBySide <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .SideBySide(QSQ)
+
+}
+
+# ------------------------------- #
+# ConstantSum class & constructor #
+# ------------------------------- #
+
+.ConstantSum <- setClass(
+  # Name
+  "ConstantSum",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+ConstantSum <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .ConstantSum(QSQ)
+
+}
+
+# -------------------------------- #
+# GroupAndRank class & constructor #
+# -------------------------------- #
+
+.GroupAndRank <- setClass(
+  # Name
+  "GroupAndRank",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+GroupAndRank <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .GroupAndRank(QSQ)
+
+}
+
+# --------------------------- #
+# HotSpot class & constructor #
+# --------------------------- #
+
+.HotSpot <- setClass(
+  # Name
+  "HotSpot",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+HotSpot <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .HotSpot(QSQ)
+
+}
+
+# --------------------------- #
+# HeatMap class & constructor #
+# --------------------------- #
+
+.HeatMap <- setClass(
+  # Name
+  "HeatMap",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+HeatMap <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .HeatMap(QSQ)
+
+}
+
+# ----------------------------- #
+# DrillDown class & constructor #
+# ----------------------------- #
+
+.DrillDown <- setClass(
+  # Name
+  "DrillDown",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+DrillDown <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .DrillDown(QSQ)
+
+}
+
+# ------------------------------------ #
+# NetPromoterScore class & constructor #
+# ------------------------------------ #
+
+.NetPromoterScore <- setClass(
+  # Name
+  "NetPromoterScore",
+  # Inherits
+  contains = c("MultipleChoice", "QualtricsSurveyQuestion")
+)
+
+# Constructor
+NetPromoterScore <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .NetPromoterScore(QSQ)
+
+}
+
+# ----------------------------- #
+# HighLight class & constructor #
+# ----------------------------- #
+
+.HighLight <- setClass(
+  # Name
+  "HighLight",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+HighLight <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .HighLight(QSQ)
+
+}
+
+# ----------------------------- #
+# Signature class & constructor #
+# ----------------------------- #
+
+.Signature <- setClass(
+  # Name
+  "Signature",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+Signature <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .Signature(QSQ)
+
+}
+
+# ----------------------------- #
+# Timer class & constructor #
+# ----------------------------- #
+
+.Timer <- setClass(
+  # Name
+  "Timer",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+Timer <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .Timer(QSQ)
+
+}
+
+# ---------------------------- #
+# MetaInfo class & constructor #
+# ---------------------------- #
+
+.MetaInfo <- setClass(
+  # Name
+  "MetaInfo",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+MetaInfo <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .MetaInfo(QSQ)
+
+}
+
+# ----------------------------- #
+# Captcha class & constructor #
+# ----------------------------- #
+
+.Captcha <- setClass(
+  # Name
+  "Captcha",
+  # Inherits
+  contains = "QualtricsSurveyQuestion"
+)
+
+# Constructor
+Captcha <- function(data, identifier) {
+
+  # Call QualtricsSurveyQuestion constructor
+  QSQ <- QualtricsSurveyQuestion(data, identifier)
+
+  # Create an object
+  .Captcha(QSQ)
+
+}
