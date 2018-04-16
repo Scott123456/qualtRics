@@ -103,9 +103,9 @@ qualtrics_register_options <- function(verbose=TRUE,
   # If purge all credentials
   if("reset_credentials" %in% names(opts)) {
 
-    assertthat::is.flag(opts$purge_credentials)
+    assertthat::is.flag(opts$reset_credentials)
 
-    if(opts$purge_credentials) {
+    if(opts$reset_credentials) {
 
       # Reset credentials
       Sys.setenv("QUALTRICS_API_KEY" = "")
