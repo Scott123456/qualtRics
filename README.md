@@ -10,6 +10,10 @@ Note that your institution must support API access and that it must be enabled f
 
 I am not affiliated with Qualtrics and they do not offer support for this package.
 
+## Slack channel
+
+If you want to contribute or have questions/comments, please sign up to the [Slack channel](https://join.slack.com/t/qualtricsrpackage/shared_invite/enQtMzUwODMxODA0MTY0LTNkNzc5MzlkZDFmNDZjNTcyZTE1ODU3ZWI2YWRkOTk1OTNiNGE0OTk1MmVkNjVjYzUzOTEyZGU4YTcwZGRkYzA)
+
 ## Installation
 
 To install this package, execute the following in R:
