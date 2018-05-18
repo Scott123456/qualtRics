@@ -18,6 +18,9 @@ cache:
 build_script:
   - travis-tool.sh install_deps
 
+r_packages:
+  - dplyr
+
 test_script:
   - travis-tool.sh run_tests
 
