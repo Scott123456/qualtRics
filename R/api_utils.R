@@ -45,7 +45,10 @@ qualtrics_create_header <- function() {
 
     c(
       'authorization' = paste("bearer",
-                              Sys.getenv("QUALTRICS_OAUTH_TOKEN"))
+                              Sys.getenv("QUALTRICS_OAUTH_TOKEN")),
+      'Content-Type' = "application/json",
+      'Accept' = '*/*',
+      'accept-encoding' = 'gzip, deflate'
     )
 
   }
@@ -77,7 +80,45 @@ qualtrics_handle_request <- function(verb = c("GET", "POST"),
   # this happens after 60 minutes
   # simply register new token and re-send request
 
-  # CODE HERE
+  if(httr::http_error(res)) {
+
+    if(httr::status_code(res) == 401) {
+
+      if(httr::has_content(res)) {
+
+        tmp <- httr::content(res)
+
+        if(!is.null(tmp$meta$error$errorCode)) {
+
+          if(tmp$meta$error$errorCode == "AUTH_6.0") {
+
+            # Get new bearer token
+            qualtrics_set_bearer_token()
+
+            # Construct header
+            header <- qualtrics_create_header()
+
+            # Send request to qualtrics API
+            res <- httr::VERB(verb,
+                              url = paste0("https://",
+                                           Sys.getenv("QUALTRICS_DATA_CENTER"),
+                                           ".qualtrics.com/API/v3/",
+                                           endpoint),
+                              httr::add_headers(
+                                header
+                              ),
+                              body = body)
+
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
 
   # Check if response type is OK
   cnt <- qualtRicsResponseCodes(res)
